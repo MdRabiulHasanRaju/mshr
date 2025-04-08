@@ -51,6 +51,7 @@
         </span>
     </td>
     <td>
+        <button class="btn btn-sm btn-info" onclick="viewTask(<?= $task->id ?>)">View</button>
         <button class="btn btn-sm btn-primary" onclick="editTask(<?= $task->id ?>, '<?= $task->title ?>', '<?= $task->description ?>', '<?= $task->priority ?>', '<?= $task->due_date ?>', '<?= $task->status ?>')">Edit</button>
         <button class="btn btn-sm btn-danger" onclick="deleteTask(<?= $task->id ?>)">Delete</button>
     </td>
@@ -89,8 +90,56 @@
   </div>
 </div>
 
+<!-- Modal for Viewing Task -->
+<div class="modal" id="viewTaskModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">View Task</h5>
+      </div>
+      <div class="modal-body">
+        <h6><strong>Title:</strong> <span id="view-title"></span></h6>
+        <p><strong>Description:</strong> <span id="view-description"></span></p>
+        <p><strong>Priority:</strong> <span id="view-priority"></span></p>
+        <p><strong>Due Date:</strong> <span id="view-due-date"></span></p>
+        <p><strong>Status:</strong> <span id="view-status"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+function viewTask(id) {
+    $.ajax({
+        url: '<?= base_url("tasks/view/") ?>' + id,  // Send a GET request to view the task details
+        method: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            if (res.status === 'success') {
+                // Set the task details in the modal
+                $('#view-title').text(res.task.title);
+                $('#view-description').text(res.task.description);
+                $('#view-priority').text(res.task.priority);
+                $('#view-due-date').text(res.task.due_date);
+                $('#view-status').text(res.task.status);
+                
+                // Show the modal
+                $('#viewTaskModal').modal('show');
+            } else {
+                alert('Error fetching task details');
+            }
+        },
+        error: function() {
+            alert('Error fetching task details');
+        }
+    });
+}
+
 function editTask(id, title, desc, priority, due, status) {
     $('#task_id').val(id);
     $('#title').val(title);

@@ -13,6 +13,11 @@ class Task_model extends CI_Model {
         }
         return $this->db->get('tasks')->result();
     }
+    public function get($id) {
+        $query = $this->db->get_where('tasks', ['id' => $id]);
+        return $query->row();  // Return the task as an object or null if not found
+    }
+    
 
     public function insert($data) {
         return $this->db->insert('tasks', $data);

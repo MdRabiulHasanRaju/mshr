@@ -16,6 +16,25 @@ class Tasks extends CI_Controller {
         $this->load->view('tasks/index', $data);
     }
 
+    public function view($id) {
+        // Ensure the ID is valid
+        if (empty($id) || !is_numeric($id)) {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid task ID']);
+            return;
+        }
+
+        // Fetch the task details
+        $task = $this->Task_model->get($id);
+        
+        if ($task) {
+            // Return task data as JSON
+            echo json_encode(['status' => 'success', 'task' => $task]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Task not found']);
+        }
+    }
+    
+
     public function store() {
         $this->Task_model->insert([
             'user_id' => $this->session->userdata('user_id'),
