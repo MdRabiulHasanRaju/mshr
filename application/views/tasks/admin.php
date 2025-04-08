@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
+    <title>Admin - Manage All Tasks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -14,60 +13,54 @@
         .badge-done { background-color: green; }
     </style>
 </head>
-<body>
-<div class="container my-5">
-    <h2 class="text-center mb-4">Task Manager</h2>
-    <div class="d-flex justify-content-between mb-3">
-        <button class="btn btn-success" onclick="$('#taskModal').modal('show')">+ Add Task</button>
-        <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-danger">Logout</a>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-bordered align-middle text-center">
-            <thead class="table-light">
-            <tr>
-                <th>Title</th>
-                <th>Priority</th>
-                <th>Due Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach($tasks as $task): ?>
-                <tr>
-                    <td><?= $task->title ?></td>
-                    <td>
-                        <span class="badge 
-                            <?= $task->priority === 'high' ? 'badge-high' : '' ?>
-                            <?= $task->priority === 'medium' ? 'badge-medium' : '' ?>
-                            <?= $task->priority === 'low' ? 'badge-low' : '' ?>">
-                            <?= ucfirst($task->priority) ?>
-                        </span>
-                    </td>
-                    <td><?= $task->due_date ?></td>
-                    <td>
-                        <span class="badge 
-                            <?= $task->status === 'pending' ? 'badge-pending' : '' ?>
-                            <?= $task->status === 'done' ? 'badge-done' : '' ?>">
-                            <?= ucfirst($task->status) ?>
-                        </span>
-                    </td>
-                    <td>
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-sm btn-info" onclick="viewTask(<?= $task->id ?>)">View</button>
-                            
-                            <button class="btn btn-sm btn-primary" onclick="editTask(<?= $task->id ?>, '<?= $task->title ?>', '<?= $task->description ?>', '<?= $task->priority ?>', '<?= $task->due_date ?>', '<?= $task->status ?>')">Edit</button>
+<body class="container mt-5">
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Admin Panel - All Tasks</h2>
+    <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-danger">Logout</a>
+</div>
 
-                            <?php if ($this->session->userdata('role') === 'admin'): ?>
-                                <button class="btn btn-sm btn-danger" onclick="deleteTask(<?= $task->id ?>)">Delete</button>
-                            <?php endif; ?>
-                        </div>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+<div class="table-responsive">
+<table class="table table-bordered table-striped align-middle">
+<thead class="table-dark">
+    <tr>
+        <th>User</th>
+        <th>Title</th>
+        <th>Priority</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+<tbody>
+<?php foreach($all_tasks as $task): ?>
+<tr>
+    <td><?= $task->username ?? 'Unknown' ?></td>
+    <td><?= $task->title ?></td>
+    <td>
+        <span class="badge 
+            <?= $task->priority === 'high' ? 'badge-high' : '' ?>
+            <?= $task->priority === 'medium' ? 'badge-medium' : '' ?>
+            <?= $task->priority === 'low' ? 'badge-low' : '' ?>">
+            <?= ucfirst($task->priority) ?>
+        </span>
+    </td>
+    <td><?= $task->due_date ?></td>
+    <td>
+        <span class="badge 
+            <?= $task->status === 'pending' ? 'badge-pending' : '' ?>
+            <?= $task->status === 'done' ? 'badge-done' : '' ?>">
+            <?= ucfirst($task->status) ?>
+        </span>
+    </td>
+    <td>
+        <button class="btn btn-sm btn-info" onclick="viewTask(<?= $task->id ?>)">View</button>
+        <button class="btn btn-sm btn-primary" onclick="editTask(<?= $task->id ?>, '<?= $task->title ?>', '<?= $task->description ?>', '<?= $task->priority ?>', '<?= $task->due_date ?>', '<?= $task->status ?>')">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteTask(<?= $task->id ?>)">Delete</button>
+    </td>
+</tr>
+<?php endforeach; ?>
+</tbody>
+</table>
 </div>
 
 <!-- Task Modal -->
@@ -122,6 +115,7 @@
     </div>
   </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>

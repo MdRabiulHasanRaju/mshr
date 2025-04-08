@@ -30,5 +30,13 @@ class Task_model extends CI_Model {
     public function delete($id) {
         return $this->db->delete('tasks', ['id' => $id]);
     }
+    public function get_all_tasks_with_users()
+    {
+        $this->db->select('tasks.*, users.username');
+        $this->db->from('tasks');
+        $this->db->join('users', 'users.id = tasks.user_id');
+        return $this->db->get()->result();
+    }
+
 }
 ?>

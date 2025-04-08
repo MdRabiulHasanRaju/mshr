@@ -57,9 +57,34 @@ class Tasks extends CI_Controller {
         echo json_encode(['status' => 'success']);
     }
 
-    public function delete($id) {
+    // public function delete($id) {
+    //     $this->Task_model->delete($id);
+    //     echo json_encode(['status' => 'deleted']);
+    // }
+
+    public function delete($id)
+    {
+        if ($this->session->userdata('role') !== 'admin') {
+            echo json_encode(['status' => 'unauthorized']);
+            return;
+        }
+
         $this->Task_model->delete($id);
         echo json_encode(['status' => 'deleted']);
     }
+
+
+    public function admin()
+    {
+        if ($this->session->userdata('role') !== 'admin') {
+            show_error('Unauthorized access', 403);
+        }
+    
+        $this->load->model('Task_model');
+        $data['all_tasks'] = $this->Task_model->get_all_tasks_with_users();
+        $this->load->view('tasks/admin', $data);
+    }
+    
+
 }
 ?>

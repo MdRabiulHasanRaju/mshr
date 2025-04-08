@@ -7,23 +7,39 @@ class Auth extends CI_Controller {
         $this->load->library('session');
     }
   
-    public function login() {
-        if ($_POST) {
+    public function login()
+    {
+        $this->load->model('User_model');
+        $error = '';
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $this->User_model->check_login($this->input->post('username'), $this->input->post('password'));
+            
             if ($user) {
-                $this->session->set_userdata('user_id', $user->id);
-                redirect('tasks');
+                $this->session->set_userdata([
+                    'user_id' => $user->id,
+                    'username' => $user->username,
+                    'role' => $user->role, 
+                    'logged_in' => true
+                ]);
+                if ($user->role === 'admin') {
+                    redirect('tasks/admin'); 
+                } else {
+                    redirect('tasks');
+                }
             } else {
-                $data['error'] = 'Invalid username or password';
+                $error = 'Invalid credentials';
             }
         }
-        $this->load->view('auth/login', $data ?? []);
+    
+        $this->load->view('auth/login', ['error' => $error]);
     }
 
     public function logout() {
-        $this->session->sess_destroy();
+        $this->session->unset_userdata('user_id');
         redirect('auth/login');
     }
+    
 }
 
 ?>
