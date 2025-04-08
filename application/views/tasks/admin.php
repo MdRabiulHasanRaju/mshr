@@ -14,8 +14,11 @@
     </style>
 </head>
 <body class="container mt-5">
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Admin Panel - All Tasks</h2>
+<h2>Admin Panel - All Tasks</h2>
+<div class="d-flex justify-content-between align-items-center my-3">
+    <!-- Add New User Button -->
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">+ Add New User</button>
+
     <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-danger">Logout</a>
 </div>
 
@@ -116,6 +119,39 @@
   </div>
 </div>
 
+<!-- Modal for Adding New User -->
+<div class="modal" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addUserForm">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+          <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select class="form-select" id="role" name="role" required>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Add User</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -170,6 +206,31 @@ function deleteTask(id) {
         }, 'json');
     }
 }
+
+$('#addUserForm').submit(function(e) {
+      e.preventDefault();  // Prevent form from submitting the traditional way
+
+      // Get form data
+      var formData = $(this).serialize();
+
+      $.ajax({
+        url: '<?= base_url("admin/addUser") ?>',  // Set the controller method to handle the form
+        type: 'POST',
+        data: formData,
+        success: function(response) {
+          response = JSON.parse(response)
+          if (response.status === 'success') {
+            alert('User added successfully!');
+            location.reload();  // Reload the page to show the new user
+          } else {
+            alert(response);
+          }
+        },
+        error: function() {
+          alert('Something went wrong. Please try again.');
+        }
+      });
+    });
 </script>
 </body>
 </html>
