@@ -36,11 +36,17 @@ class Tasks extends CI_Controller {
     
 
     public function store() {
+        // Load email library
+        $this->load->library('email');
+    
+        // Determine the user_id
         if($this->input->post('user_id')){
             $userId = $this->input->post('user_id');
-        }else{
+        } else {
             $userId = $this->session->userdata('user_id');
         }
+    
+        // Insert task
         $this->Task_model->insert([
             'user_id' => $userId,
             'title' => $this->input->post('title'),
@@ -48,8 +54,45 @@ class Tasks extends CI_Controller {
             'priority' => $this->input->post('priority'),
             'due_date' => $this->input->post('due_date')
         ]);
-        echo json_encode(['status' => 'success']);
+    
+        // Fetch user email
+        $user = $this->User_model->getUserById($userId); 
+        $userEmail = $user->email;
+    
+        // Configure SMTP
+        $config = [
+            'protocol' => 'smtp',
+            'smtp_host' => 'mail.macroschoolbd.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'mshr@macroschoolbd.com', 
+            'smtp_pass' => 'macroschool7772',         
+            'mailtype'  => 'html',
+            'charset'   => 'utf-8',
+            'smtp_crypto' => 'ssl',
+            'newline' => "\r\n"
+        ];
+        $this->email->initialize($config);
+    
+        // Compose email
+        $this->email->from('mshr@macroschoolbd.com', 'Macro School Task Manager');
+        $this->email->to($userEmail);
+        $this->email->subject('New Task Assigned to You');
+        $this->email->message("
+            <h3>New Task Assigned</h3>
+            <p><strong>Title:</strong> {$this->input->post('title')}</p>
+            <p><strong>Description:</strong> {$this->input->post('description')}</p>
+            <p><strong>Priority:</strong> {$this->input->post('priority')}</p>
+            <p><strong>Due Date:</strong> {$this->input->post('due_date')}</p>
+        ");
+    
+        // Send the email
+        if ($this->email->send()) {
+            echo json_encode(['status' => 'success', 'email' => 'sent']);
+        } else {
+            echo json_encode(['status' => 'success', 'email' => 'failed', 'debug' => $this->email->print_debugger()]);
+        }
     }
+    
 
     public function update($id) {
         if($this->input->post('user_id')){
