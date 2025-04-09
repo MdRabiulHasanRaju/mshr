@@ -10,6 +10,7 @@
         .badge-medium { background-color: orange; }
         .badge-high { background-color: tomato; }
         .badge-pending { background-color: red; }
+        .badge-progress { background-color: #cd8546; }
         .badge-done { background-color: green; }
     </style>
 </head>
@@ -29,15 +30,29 @@
 
 <div class="table-responsive">
 <form method="get" class="mb-3">
-  <label for="user_filter" class="form-label">Filter by User:</label>
-  <select name="user_id" id="user_filter" class="form-select" onchange="this.form.submit()">
-    <option value="">All Users</option>
-    <?php foreach($users as $user): ?>
-      <option value="<?= $user->id ?>" <?= isset($_GET['user_id']) && $_GET['user_id'] == $user->id ? 'selected' : '' ?>>
-        <?= ucfirst($user->username) ?>
-      </option>
-    <?php endforeach; ?>
-  </select>
+  <div class="row">
+    <div class="col-md-6">
+    <label for="user_filter" class="form-label">Filter by User:</label>
+    <select name="user_id" id="user_filter" class="form-select" onchange="this.form.submit()">
+      <option value="">All Users</option>
+      <?php foreach($users as $user): ?>
+        <option value="<?= $user->id ?>" <?= isset($_GET['user_id']) && $_GET['user_id'] == $user->id ? 'selected' : '' ?>>
+          <?= ucfirst($user->username) ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+    </div>
+
+    <div class="col-md-6">
+        <label for="status_filter" class="form-label">Filter by Status:</label>
+        <select name="status" id="status_filter" class="form-select" onchange="this.form.submit()">
+          <option value="">All Status</option>
+          <option value="pending" <?= isset($_GET['status']) && $_GET['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+          <option value="inprogress" <?= isset($_GET['status']) && $_GET['status'] == 'inprogress' ? 'selected' : '' ?>>In Progress</option>
+          <option value="done" <?= isset($_GET['status']) && $_GET['status'] == 'done' ? 'selected' : '' ?>>Done</option>
+        </select>
+      </div>
+  </div>
 </form>
 
 <table class="table table-bordered table-striped align-middle">
@@ -68,8 +83,16 @@
     <td>
         <span class="badge 
             <?= $task->status === 'pending' ? 'badge-pending' : '' ?>
+            <?= $task->status === 'inprogress' ? 'badge-progress' : '' ?>
             <?= $task->status === 'done' ? 'badge-done' : '' ?>">
-            <?= ucfirst($task->status) ?>
+            <?php
+            if($task->status === 'inprogress'){
+              echo ucfirst(substr($task->status,0,2))." ";
+              echo ucfirst(substr($task->status,2));
+            }else{
+              echo ucfirst($task->status);
+            }
+            ?>
         </span>
     </td>
     <td>
@@ -118,6 +141,7 @@
         <input type="date" name="due_date" id="due_date" class="form-control mb-2">
         <select name="status" id="status" class="form-select">
           <option value="pending">Pending</option>
+          <option value="inprogress">In Progress</option>
           <option value="done">Done</option>
         </select>
       </div>

@@ -7,15 +7,17 @@ class Tasks extends CI_Controller {
         $this->load->library('session');
         if (!$this->session->userdata('user_id')) {
             redirect('auth/login');
-        }else if($this->session->userdata('role')=='admin'){
-            redirect('admin');
         }
     }
 
     public function index() {
-        $filters = $this->input->get();
-        $data['tasks'] = $this->Task_model->get_tasks($this->session->userdata('user_id'), $filters);
-        $this->load->view('tasks/index', $data);
+        if($this->session->userdata('role')=='admin'){
+            redirect('admin');
+        }else{
+            $filters = $this->input->get();
+            $data['tasks'] = $this->Task_model->get_tasks($this->session->userdata('user_id'), $filters);
+            $this->load->view('tasks/index', $data);
+        }
     }
 
     public function view($id) {

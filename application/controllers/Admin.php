@@ -7,9 +7,14 @@ class Admin extends CI_Controller {
             show_error('Unauthorized access', 403);
         }
         $user_id = $this->input->get('user_id');
+        $status = $this->input->get('status');
         $this->load->model('Task_model');
         $data['users'] = $this->db->get('users')->result();
-        $data['all_tasks'] = $user_id ? $this->Task_model->getTasksByUser($user_id) : $this->Task_model->get_all_tasks_with_users();
+        if($user_id || $status){
+            $data['all_tasks'] = $this->Task_model->getTasksByFilter($user_id, $status);
+        }else{
+            $data['all_tasks'] = $this->Task_model->get_all_tasks_with_users();
+        }
         $this->load->view('admin/admin', $data);
     }
 

@@ -11,6 +11,7 @@
         .badge-medium { background-color: orange; }
         .badge-high { background-color: tomato; }
         .badge-pending { background-color: red; }
+        .badge-progress { background-color: #cd8546; }
         .badge-done { background-color: green; }
     </style>
 </head>
@@ -48,8 +49,16 @@
                     <td>
                         <span class="badge 
                             <?= $task->status === 'pending' ? 'badge-pending' : '' ?>
+                            <?= $task->status === 'inprogress' ? 'badge-progress' : '' ?>
                             <?= $task->status === 'done' ? 'badge-done' : '' ?>">
-                            <?= ucfirst($task->status) ?>
+                            <?php
+                                if($task->status === 'inprogress'){
+                                echo ucfirst(substr($task->status,0,2))." ";
+                                echo ucfirst(substr($task->status,2));
+                                }else{
+                                echo ucfirst($task->status);
+                                }
+                            ?>
                         </span>
                     </td>
                     <td>
@@ -90,6 +99,7 @@
         <input type="date" name="due_date" id="due_date" class="form-control mb-2">
         <select name="status" id="status" class="form-select">
           <option value="pending">Pending</option>
+          <option value="inprogress">In Progress</option>
           <option value="done">Done</option>
         </select>
       </div>
