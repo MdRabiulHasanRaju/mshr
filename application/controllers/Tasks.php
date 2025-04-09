@@ -74,16 +74,6 @@ class Tasks extends CI_Controller {
     }
 
 
-    public function admin()
-    {
-        if ($this->session->userdata('role') !== 'admin') {
-            show_error('Unauthorized access', 403);
-        }
-    
-        $this->load->model('Task_model');
-        $data['all_tasks'] = $this->Task_model->get_all_tasks_with_users();
-        $this->load->view('tasks/admin', $data);
-    }
     
 
 }

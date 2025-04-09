@@ -8,9 +8,12 @@ class User_model extends CI_Model {
         return false;
     }
     public function addUser($data) {
-        // Insert the user data into the database
         $this->db->insert('users', $data);
         return true;
     }
+    public function get_all_users() {
+        return $this->db->get('users')->result(); 
+    }
+    
 }
 ?>

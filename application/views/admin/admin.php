@@ -16,9 +16,12 @@
 <body class="container mt-5">
 <h2>Admin Panel - All Tasks</h2>
 <div class="d-flex justify-content-between align-items-center my-3">
-    <!-- Add New User Button -->
-    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">+ Add New User</button>
+    <div class="d-flex gap-1">
+      <a href="<?= base_url('admin/users') ?>" class="btn btn-outline-success">Users List</a>
 
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">+ Add New User</button>
+    </div>
+    
     <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-danger">Logout</a>
 </div>
 
@@ -120,7 +123,7 @@
 </div>
 
 <!-- Modal for Adding New User -->
-<div class="modal" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

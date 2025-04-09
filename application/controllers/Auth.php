@@ -23,7 +23,7 @@ class Auth extends CI_Controller {
                     'logged_in' => true
                 ]);
                 if ($user->role === 'admin') {
-                    redirect('tasks/admin'); 
+                    redirect('admin'); 
                 } else {
                     redirect('tasks');
                 }
