@@ -21,8 +21,10 @@
 
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">+ Add New User</button>
     </div>
-    
-    <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-danger">Logout</a>
+    <div class="d-flex gap-1">
+      <button class="btn btn-success" onclick="$('#taskModal').modal('show')">+ Add Task</button>
+      <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-danger">Logout</a>
+    </div>
 </div>
 
 <div class="table-responsive">
@@ -60,7 +62,11 @@
     </td>
     <td>
         <button class="btn btn-sm btn-info" onclick="viewTask(<?= $task->id ?>)">View</button>
-        <button class="btn btn-sm btn-primary" onclick="editTask(<?= $task->id ?>, '<?= $task->title ?>', '<?= $task->description ?>', '<?= $task->priority ?>', '<?= $task->due_date ?>', '<?= $task->status ?>')">Edit</button>
+
+        <button class="btn btn-sm btn-primary"
+        onclick="editTask(<?= $task->id ?>, '<?= $task->title ?>', '<?= $task->description ?>', '<?= $task->priority ?>', '<?= $task->due_date ?>', '<?= $task->status ?>', <?= $task->user_id ?>)">Edit</button>
+
+
         <button class="btn btn-sm btn-danger" onclick="deleteTask(<?= $task->id ?>)">Delete</button>
     </td>
 </tr>
@@ -78,6 +84,17 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+
+        <div class="mb-2">
+          <label for="assign_user" class="form-label">Assign to User</label>
+          <select name="user_id" id="assign_user" class="form-select" required>
+            <option value="">-- Select User --</option>
+            <?php foreach($users as $user): ?>
+              <option value="<?= $user->id ?>"><?= $user->username ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
         <input type="hidden" name="task_id" id="task_id">
         <input type="text" name="title" id="title" class="form-control mb-2" placeholder="Title" required>
         <textarea name="description" id="description" class="form-control mb-2" placeholder="Description"></textarea>
@@ -181,13 +198,14 @@ function viewTask(id) {
     });
 }
 
-function editTask(id, title, desc, priority, due, status) {
+function editTask(id, title, desc, priority, due, status, user_id) {
     $('#task_id').val(id);
     $('#title').val(title);
     $('#description').val(desc);
     $('#priority').val(priority);
     $('#due_date').val(due);
     $('#status').val(status);
+    $('#assign_user').val(user_id);
     new bootstrap.Modal(document.getElementById('taskModal')).show();
 }
 

@@ -8,6 +8,7 @@ class Admin extends CI_Controller {
         }
     
         $this->load->model('Task_model');
+        $data['users'] = $this->db->get('users')->result();
         $data['all_tasks'] = $this->Task_model->get_all_tasks_with_users();
         $this->load->view('admin/admin', $data);
     }

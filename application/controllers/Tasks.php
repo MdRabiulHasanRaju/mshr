@@ -36,8 +36,13 @@ class Tasks extends CI_Controller {
     
 
     public function store() {
+        if($this->input->post('user_id')){
+            $userId = $this->input->post('user_id');
+        }else{
+            $userId = $this->session->userdata('user_id');
+        }
         $this->Task_model->insert([
-            'user_id' => $this->session->userdata('user_id'),
+            'user_id' => $userId,
             'title' => $this->input->post('title'),
             'description' => $this->input->post('description'),
             'priority' => $this->input->post('priority'),
@@ -47,7 +52,13 @@ class Tasks extends CI_Controller {
     }
 
     public function update($id) {
+        if($this->input->post('user_id')){
+            $userId = $this->input->post('user_id');
+        }else{
+            $userId = $this->session->userdata('user_id');
+        }
         $this->Task_model->update($id, [
+            'user_id' => $userId,
             'title' => $this->input->post('title'),
             'description' => $this->input->post('description'),
             'priority' => $this->input->post('priority'),
