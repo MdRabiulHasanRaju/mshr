@@ -28,6 +28,18 @@
 </div>
 
 <div class="table-responsive">
+<form method="get" class="mb-3">
+  <label for="user_filter" class="form-label">Filter by User:</label>
+  <select name="user_id" id="user_filter" class="form-select" onchange="this.form.submit()">
+    <option value="">All Users</option>
+    <?php foreach($users as $user): ?>
+      <option value="<?= $user->id ?>" <?= isset($_GET['user_id']) && $_GET['user_id'] == $user->id ? 'selected' : '' ?>>
+        <?= ucfirst($user->username) ?>
+      </option>
+    <?php endforeach; ?>
+  </select>
+</form>
+
 <table class="table table-bordered table-striped align-middle">
 <thead class="table-dark">
     <tr>

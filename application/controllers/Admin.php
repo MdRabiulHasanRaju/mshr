@@ -6,10 +6,10 @@ class Admin extends CI_Controller {
         if ($this->session->userdata('role') !== 'admin') {
             show_error('Unauthorized access', 403);
         }
-    
+        $user_id = $this->input->get('user_id');
         $this->load->model('Task_model');
         $data['users'] = $this->db->get('users')->result();
-        $data['all_tasks'] = $this->Task_model->get_all_tasks_with_users();
+        $data['all_tasks'] = $user_id ? $this->Task_model->getTasksByUser($user_id) : $this->Task_model->get_all_tasks_with_users();
         $this->load->view('admin/admin', $data);
     }
 
