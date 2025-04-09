@@ -2,14 +2,15 @@
 <html>
 <head>
     <title>All Registered Users</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="container mt-5">
     <h2>All Registered Users</h2>
     <a href="<?= base_url('admin') ?>" class="btn btn-secondary mb-3">← Back to Admin Panel</a>
-
-    <table class="table table-bordered table-hover">
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark">
             <tr>
                 <th>Username</th>
@@ -34,6 +35,7 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+</div>
 
     <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1">

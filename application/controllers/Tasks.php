@@ -7,6 +7,8 @@ class Tasks extends CI_Controller {
         $this->load->library('session');
         if (!$this->session->userdata('user_id')) {
             redirect('auth/login');
+        }else if($this->session->userdata('role')=='admin'){
+            redirect('admin');
         }
     }
 
