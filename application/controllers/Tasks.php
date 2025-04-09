@@ -36,11 +36,8 @@ class Tasks extends CI_Controller {
     
 
     public function store() {
-        // Load email library
-        $this->load->library('email');
-    
         // Determine the user_id
-        if($this->input->post('user_id')){
+        if ($this->input->post('user_id')) {
             $userId = $this->input->post('user_id');
         } else {
             $userId = $this->session->userdata('user_id');
@@ -56,42 +53,33 @@ class Tasks extends CI_Controller {
         ]);
     
         // Fetch user email
-        $user = $this->User_model->getUserById($userId); 
+        $user = $this->User_model->getUserById($userId);
         $userEmail = $user->email;
     
-        // Configure SMTP
-        $config = [
-            'protocol' => 'smtp',
-            'smtp_host' => 'mail.macroschoolbd.com',
-            'smtp_port' => 465,
-            'smtp_user' => 'mshr@macroschoolbd.com', 
-            'smtp_pass' => 'macroschool7772',         
-            'mailtype'  => 'html',
-            'charset'   => 'utf-8',
-            'smtp_crypto' => 'ssl',
-            'newline' => "\r\n"
-        ];
-        $this->email->initialize($config);
-    
         // Compose email
-        $this->email->from('mshr@macroschoolbd.com', 'Macro School Task Manager');
-        $this->email->to($userEmail);
-        $this->email->subject('New Task Assigned to You');
-        $this->email->message("
+        $subject = 'New Task Assigned to You';
+        $message = "
             <h3>New Task Assigned</h3>
             <p><strong>Title:</strong> {$this->input->post('title')}</p>
             <p><strong>Description:</strong> {$this->input->post('description')}</p>
             <p><strong>Priority:</strong> {$this->input->post('priority')}</p>
             <p><strong>Due Date:</strong> {$this->input->post('due_date')}</p>
-        ");
+        ";
+    
+        // Set the email headers for HTML email
+        $headers = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $headers .= "From: mshr@macroschoolbd.com\r\n";  // Sender's email address
+        $headers .= "Reply-To: mshr@macroschoolbd.com\r\n";  // Reply-to email address
     
         // Send the email
-        if ($this->email->send()) {
+        if (mail($userEmail, $subject, $message, $headers)) {
             echo json_encode(['status' => 'success', 'email' => 'sent']);
         } else {
-            echo json_encode(['status' => 'success', 'email' => 'failed', 'debug' => $this->email->print_debugger()]);
+            echo json_encode(['status' => 'error', 'email' => 'failed']);
         }
     }
+
     
 
     public function update($id) {
