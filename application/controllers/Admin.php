@@ -19,12 +19,14 @@ class Admin extends CI_Controller {
 
         // Get form data
         $username = $this->input->post('username');
+        $email = $this->input->post('email');
         $password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);  // Hash the password
         $role = $this->input->post('role');
 
         // Prepare data to insert
         $userData = [
             'username' => $username,
+            'email' => $email,
             'password' => $password,
             'role' => $role
         ];
@@ -52,6 +54,7 @@ class Admin extends CI_Controller {
         $id = $this->input->post('id');
         $data = [
             'username' => $this->input->post('username'),
+            'email' => $this->input->post('email'),
             'role' => $this->input->post('role')
         ];
         $this->db->where('id', $id)->update('users', $data);

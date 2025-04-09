@@ -166,6 +166,10 @@
             <input type="text" class="form-control" id="username" name="username" required>
           </div>
           <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+          <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password" name="password" required>
           </div>
@@ -241,20 +245,20 @@ function deleteTask(id) {
 }
 
 $('#addUserForm').submit(function(e) {
-      e.preventDefault();  // Prevent form from submitting the traditional way
+      e.preventDefault();  
 
       // Get form data
       var formData = $(this).serialize();
 
       $.ajax({
-        url: '<?= base_url("admin/addUser") ?>',  // Set the controller method to handle the form
+        url: '<?= base_url("admin/addUser") ?>',  
         type: 'POST',
         data: formData,
         success: function(response) {
           response = JSON.parse(response)
           if (response.status === 'success') {
             alert('User added successfully!');
-            location.reload();  // Reload the page to show the new user
+            location.reload();  
           } else {
             alert(response);
           }
