@@ -16,7 +16,7 @@
 </head>
 <body class="container mt-5">
 <h2>Admin Panel - All Tasks</h2>
-<div class="d-flex justify-content-between align-items-center my-3">
+<div class="d-flex justify-content-between align-items-center my-3 gap-3">
     <div class="d-flex gap-1">
       <a href="<?= base_url('admin/users') ?>" class="btn btn-outline-success">Users List</a>
 
@@ -71,7 +71,7 @@
 <tbody>
 <?php foreach($all_tasks as $task): ?>
 <tr>
-    <td><?= $task->username ?? 'Unknown' ?></td>
+    <td><?= ucfirst($task->username ?? 'Unknown') ?></td>
     <td><?= $task->title ?></td>
     <td>
         <span class="badge 
@@ -166,7 +166,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <h6><strong>Title:</strong> <span id="view-title"></span></h6>
+        <h6><strong>Topic:</strong> <span id="view-title"></span></h6>
         <p><strong>Description:</strong> <span id="view-description"></span></p>
         <p><strong>Priority:</strong> <span id="view-priority"></span></p>
         <p><strong>Deadline:</strong> <span id="view-due-date"></span></p>

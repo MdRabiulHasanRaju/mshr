@@ -26,7 +26,7 @@
         <table class="table table-bordered align-middle text-center">
             <thead class="table-light">
             <tr>
-                <th>Title</th>
+                <th>Topic</th>
                 <th>Priority</th>
                 <th>Assign Date</th>
                 <th>Deadline</th>
