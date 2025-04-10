@@ -61,8 +61,10 @@
         <th>User</th>
         <th>Title</th>
         <th>Priority</th>
-        <th>Due Date</th>
+        <th>Assign Date</th>
+        <th>Deadline</th>
         <th>Status</th>
+        <th>Last Update</th>
         <th>Actions</th>
     </tr>
 </thead>
@@ -79,7 +81,8 @@
             <?= ucfirst($task->priority) ?>
         </span>
     </td>
-    <td><?= $task->due_date ?></td>
+    <td><?= date("F j, Y, g:i a",strtotime($task->created_at)); ?></td>
+    <td><?= date("F j, Y, g:i a",strtotime($task->due_date)); ?></td>
     <td>
         <span class="badge 
             <?= $task->status === 'pending' ? 'badge-pending' : '' ?>
@@ -95,6 +98,7 @@
             ?>
         </span>
     </td>
+    <td><?= date("F j, Y, g:i a",strtotime($task->updated_at)); ?></td>
     <td>
         <button class="btn btn-sm btn-info" onclick="viewTask(<?= $task->id ?>)">View</button>
 
@@ -165,7 +169,7 @@
         <h6><strong>Title:</strong> <span id="view-title"></span></h6>
         <p><strong>Description:</strong> <span id="view-description"></span></p>
         <p><strong>Priority:</strong> <span id="view-priority"></span></p>
-        <p><strong>Due Date:</strong> <span id="view-due-date"></span></p>
+        <p><strong>Deadline:</strong> <span id="view-due-date"></span></p>
         <p><strong>Status:</strong> <span id="view-status"></span></p>
       </div>
       <div class="modal-footer">
