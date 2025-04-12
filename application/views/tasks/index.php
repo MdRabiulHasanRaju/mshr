@@ -23,6 +23,15 @@
         <a href="<?= base_url('auth/logout') ?>" class="btn btn-outline-danger">Logout</a>
     </div>
     <div class="table-responsive">
+        <form method="get" class="mb-3">
+                <label for="status_filter" class="form-label">Filter by Status:</label>
+                <select name="status" id="status_filter" class="form-select" onchange="this.form.submit()">
+                  <option value="">All Status</option>
+                  <option value="pending" <?= isset($_GET['status']) && $_GET['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+                  <option value="inprogress" <?= isset($_GET['status']) && $_GET['status'] == 'inprogress' ? 'selected' : '' ?>>In Progress</option>
+                  <option value="done" <?= isset($_GET['status']) && $_GET['status'] == 'done' ? 'selected' : '' ?>>Done</option>
+                </select>
+        </form>
         <table class="table table-bordered align-middle text-center">
             <thead class="table-light">
             <tr>
@@ -47,7 +56,7 @@
                         </span>
                     </td>
                     <td><?= date("F j, Y, g:i a",strtotime($task->created_at)); ?></td>
-                    <td><?= date("F j, Y, g:i a",strtotime($task->due_date)); ?></td>
+                    <td><?= date("F j, Y",strtotime($task->due_date)); ?></td>
                     <td>
                         <span class="badge 
                             <?= $task->status === 'pending' ? 'badge-pending' : '' ?>
@@ -67,7 +76,21 @@
                         <div class="btn-group" role="group">
                             <button class="btn btn-sm btn-info" onclick="viewTask(<?= $task->id ?>)">View</button>
                             
-                            <button class="btn btn-sm btn-primary" onclick="editTask(<?= $task->id ?>, '<?= $task->title ?>', '<?= $task->description ?>', '<?= $task->priority ?>', '<?= $task->due_date ?>', '<?= $task->status ?>')">Edit</button>
+                            <button 
+          class="btn btn-sm btn-primary" 
+          data-id="<?= $task->id ?>"
+          data-title="<?= $task->title ?>"
+          data-description="<?= $task->description ?>"
+          data-priority="<?= $task->priority ?>"
+          data-deadline="<?= $task->due_date ?>"
+          data-status="<?= $task->status ?>"
+          onclick="handleEdit(this)">
+          Edit
+        </button>
+
+
+                            
+                            <!--<button class="btn btn-sm btn-primary" onclick="editTask(<?= $task->id ?>, '<?= $task->title ?>', '<?= $task->description ?>', '<?= $task->priority ?>', '<?= $task->due_date ?>', '<?= $task->status ?>')">Edit</button>-->
 
                             <?php if ($this->session->userdata('role') === 'admin'): ?>
                                 <button class="btn btn-sm btn-danger" onclick="deleteTask(<?= $task->id ?>)">Delete</button>
@@ -98,7 +121,7 @@
           <option value="medium">Medium</option>
           <option value="high">High</option>
         </select>
-        <input type="date" name="due_date" id="due_date" class="form-control mb-2">
+        <input type="date" placeholder="Set Deadline" name="due_date" id="due_date" class="form-control mb-2">
         <select name="status" id="status" class="form-select">
           <option value="pending">Pending</option>
           <option value="inprogress">In Progress</option>
@@ -158,6 +181,18 @@ function viewTask(id) {
             alert('Error fetching task details');
         }
     });
+}
+
+function handleEdit(button) {
+    const id = button.getAttribute('data-id');
+    const title = button.getAttribute('data-title');
+    const description = button.getAttribute('data-description');
+    const priority = button.getAttribute('data-priority');
+    const deadline = button.getAttribute('data-deadline');
+    const status = button.getAttribute('data-status');
+    const userId = button.getAttribute('data-userid');
+
+    editTask(id, title, description, priority, deadline, status);
 }
 
 function editTask(id, title, desc, priority, due, status) {

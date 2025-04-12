@@ -4,6 +4,7 @@ class Tasks extends CI_Controller {
         parent::__construct();
         $this->load->helper('url');
         $this->load->model('Task_model');
+        $this->load->model('User_model');
         $this->load->library('session');
         if (!$this->session->userdata('user_id')) {
             redirect('auth/login');
@@ -39,7 +40,7 @@ class Tasks extends CI_Controller {
     }
     
 
-    public function store() {
+   public function store() {
         // Determine the user_id
         if ($this->input->post('user_id')) {
             $userId = $this->input->post('user_id');
@@ -50,8 +51,8 @@ class Tasks extends CI_Controller {
         // Insert task
         $this->Task_model->insert([
             'user_id' => $userId,
-            'title' => $this->input->post('title'),
-            'description' => $this->input->post('description'),
+            'title' => htmlspecialchars($this->input->post('title')),
+            'description' => htmlspecialchars($this->input->post('description')),
             'priority' => $this->input->post('priority'),
             'due_date' => $this->input->post('due_date')
         ]);

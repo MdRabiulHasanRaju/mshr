@@ -82,7 +82,7 @@
         </span>
     </td>
     <td><?= date("F j, Y, g:i a",strtotime($task->created_at)); ?></td>
-    <td><?= date("F j, Y, g:i a",strtotime($task->due_date)); ?></td>
+    <td><?= date("F j, Y",strtotime($task->due_date)); ?></td>
     <td>
         <span class="badge 
             <?= $task->status === 'pending' ? 'badge-pending' : '' ?>
@@ -101,9 +101,26 @@
     <td><?= date("F j, Y, g:i a",strtotime($task->updated_at)); ?></td>
     <td>
         <button class="btn btn-sm btn-info" onclick="viewTask(<?= $task->id ?>)">View</button>
+        
+        
+        <button 
+          class="btn btn-sm btn-primary" 
+          data-id="<?= $task->id ?>"
+          data-title="<?= $task->title ?>"
+          data-description="<?= $task->description ?>"
+          data-priority="<?= $task->priority ?>"
+          data-deadline="<?= $task->due_date ?>"
+          data-status="<?= $task->status ?>"
+          data-userid="<?= $task->user_id ?>"
+          onclick="handleEdit(this)">
+          Edit
+        </button>
 
-        <button class="btn btn-sm btn-primary"
-        onclick="editTask(<?= $task->id ?>, '<?= $task->title ?>', '<?= $task->description ?>', '<?= $task->priority ?>', '<?= $task->due_date ?>', '<?= $task->status ?>', <?= $task->user_id ?>)">Edit</button>
+
+
+
+        <!--<button class="btn btn-sm btn-primary"-->
+        <!--onclick="editTask(<?= $task->id ?>, '<?= $task->title ?>', '<?= $task->description ?>', '<?= $task->priority ?>', '<?= $task->due_date ?>', '<?= $task->status ?>', <?= $task->user_id ?>)">Edit</button>-->
 
 
         <button class="btn btn-sm btn-danger" onclick="deleteTask(<?= $task->id ?>)">Delete</button>
@@ -241,6 +258,20 @@ function viewTask(id) {
         }
     });
 }
+
+
+function handleEdit(button) {
+    const id = button.getAttribute('data-id');
+    const title = button.getAttribute('data-title');
+    const description = button.getAttribute('data-description');
+    const priority = button.getAttribute('data-priority');
+    const deadline = button.getAttribute('data-deadline');
+    const status = button.getAttribute('data-status');
+    const userId = button.getAttribute('data-userid');
+
+    editTask(id, title, description, priority, deadline, status, userId);
+}
+
 
 function editTask(id, title, desc, priority, due, status, user_id) {
     $('#task_id').val(id);

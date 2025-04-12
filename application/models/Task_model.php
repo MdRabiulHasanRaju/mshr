@@ -10,6 +10,8 @@ class Task_model extends CI_Model {
         }
         if (!empty($filters['sort'])) {
             $this->db->order_by($filters['sort'], 'ASC');
+        }else {
+            $this->db->order_by('id', 'DESC'); // default sorting
         }
         return $this->db->get('tasks')->result();
     }
@@ -35,6 +37,7 @@ class Task_model extends CI_Model {
         $this->db->select('tasks.*, users.username');
         $this->db->from('tasks');
         $this->db->join('users', 'users.id = tasks.user_id');
+        $this->db->order_by('id', 'DESC');
         return $this->db->get()->result();
     }
     public function getTasksByFilter($user_id,$status){
@@ -47,6 +50,7 @@ class Task_model extends CI_Model {
         if(!empty($status)){
             $this->db->where('tasks.status', $status);
         }
+        $this->db->order_by('id', 'DESC');
         return $this->db->get()->result();
     }
 
